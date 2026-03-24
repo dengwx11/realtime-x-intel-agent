@@ -53,7 +53,7 @@ Enable Safari JavaScript automation (one-time setup):
 ### Step 2 — Install intel skills
 
 ```bash
-git clone https://github.com/dengwx11/intel-skills
+git clone https://github.com/dengwx11/realtime-x-intel-agent
 cd intel-skills
 bash install.sh
 ```
