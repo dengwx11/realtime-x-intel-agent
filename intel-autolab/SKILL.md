@@ -31,8 +31,8 @@ allowed-tools:
 
 1. 通过 Bash 获取所有时间戳和日期：
    ```bash
-   date +%Y%m%dT%H%M%S   # TIMESTAMP — 用于文件名
-   date +%Y-%m-%d         # DATE_TODAY — 用于标题和文件夹名
+   date +%Y%m%d           # DATE_PREFIX — 用于文件名（如 20260325）
+   date +%Y-%m-%d         # DATE_TODAY  — 用于标题和文件夹名
    date -v-2d +%Y-%m-%d   # DATE_48H_AGO — Query 1/2 的 since: 起点
    date -v-7d +%Y-%m-%d   # DATE_7D_AGO  — Query 3 的 since: 起点
    ```
@@ -174,7 +174,7 @@ arXiv / bioRxiv / 新闻 / PR，最后总结所有命中结果，包括链接、
 ## 步骤 3：生成 Obsidian 情报文件
 
 用 Write 工具保存到今日文件夹：
-`/Users/amber/Documents/Obsidian Vault/Areas/AutoLab/Sources/Intel/{YYYY-MM-DD}/{YYYYMMDDTHHMMSS}--autolab-intel__daily.md`
+`/Users/amber/Documents/Obsidian Vault/Areas/AutoLab/Sources/Intel/{YYYY-MM-DD}/{YYYYMMDD}--autolab-intel__daily.md`
 
 使用以下 Markdown 模板（严格填写，不省略任何字段）：
 
@@ -257,20 +257,6 @@ domain: autolab-biopharma-materials
 
 {...继续列出所有条目}
 
----
-
-## 📋 All Source Posts Index
-
-所有原始采集 posts（完整列表，按查询顺序）：
-
-**Hot Posts (48h):**
-{序号}. @{handle} [{engagement}]: "{post 内容摘要}" — {URL 或时间戳}
-
-**Paper Posts (48h):**
-{序号}. @{handle} [{engagement}]: "{post 内容摘要}" — {arXiv/DOI 或 URL}
-
-**Trending This Week (7d):**
-{序号}. @{handle} [{engagement}]: "{post 内容摘要}" — {URL 或时间戳}
 ```
 
 ---
@@ -299,13 +285,12 @@ xray 完成后，用 Edit 更新情报文件中对应 paper 的 "Xray 分析" �
 
 ### 4.2 生成 Napkin Digest
 
-全部 xray 完成后，从每个 xray 文件中读取内容，追加到情报文件末尾。
+全部 xray 完成后，用 Grep 从每个 xray 文件提取所需区块，追加到情报文件末尾。
 
-**读取步骤**（对每个 xray 文件）：
-1. 用 Read 工具读取 xray .md 文件
-2. 提取 `## NAPKIN FORMULA` 区块（含 ASCII box）
-3. 提取 `## NAPKIN SKETCH` 区块（含 ASCII art）
-4. 记录文件名（用于 wikilink）和论文简短标题
+**提取步骤**（对每个 xray 文件，使用 Grep 而非 Read 以节省 context）：
+1. 用 Grep 搜索 `## NAPKIN FORMULA`（`-A 12`）提取公式区块
+2. 用 Grep 搜索 `## NAPKIN SKETCH`（`-A 20`）提取图示区块
+3. 记录文件名（用于 wikilink）和论文简短标题
 
 **追加步骤**：用 Edit 在情报文件末尾追加：
 
@@ -342,12 +327,7 @@ xray 完成后，用 Edit 更新情报文件中对应 paper 的 "Xray 分析" �
 
 ## 步骤 5：完成
 
-1. 用 Bash 打开情报文件：
-   ```bash
-   open "/Users/amber/Documents/Obsidian Vault/Areas/AutoLab/Sources/Intel/{YYYY-MM-DD}/{autolab_filename}"
-   ```
-
-2. 输出完成摘要：
+1. 输出完成摘要：
    ```
    ✅ Intel AutoLab 完成 — {YYYY-MM-DD}
 
