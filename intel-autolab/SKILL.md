@@ -53,7 +53,19 @@ allowed-tools:
 - `{DATE_48H_AGO}` → 48小时前（如 `2026-03-23`）
 - `{DATE_7D_AGO}` → 7天前（如 `2026-03-18`）
 
-如果连接失败，提示用户启动 bridge 服务器：
+**Safari 前置检查**（在第一次调用任何 grok 工具前执行一次）：
+
+调用 `grok_health` 检查状态：
+- 返回错误（含 "Invalid index" / "Can't get window"）→ Safari 未开启，执行：
+  ```bash
+  open -a Safari "https://x.com/i/grok"
+  sleep 4
+  ```
+  然后调用 `x_grok_new_conversation`，继续。
+- 返回 `on_grok=False` → 调用 `x_grok_new_conversation` 导航，继续。
+- 返回正常（URL 含 x.com/i/grok）→ 直接继续。
+
+如果 bridge 服务本身未启动（所有调用均失败），提示用户：
 ```bash
 python3 scripts/x_grok_bridge.py --port 19999
 ```
